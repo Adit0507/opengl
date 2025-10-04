@@ -73,6 +73,19 @@ int main()
     glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
     glCompileShader(fragmentShader);
 
+    unsigned int shaderProgram;
+    shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
+        std::cout << "Error shading program linking failed\n" << infoLog << std::endl;
+    }
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+
     // settin up vertex data
     float vertices[] = {
         -0.5f, -0.5f, 0.0f, // left
@@ -91,6 +104,9 @@ int main()
 
         glClearColor(1.0f, 0.8f, 0.5f, 2.0f);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        // drawing the triangle
+        glUseProgram(shaderProgram);
 
         glfwSwapBuffers(window);
         glfwPollEvents();
