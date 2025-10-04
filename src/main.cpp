@@ -48,6 +48,14 @@ int main()
     glShaderSource(vertexShader, 1, &vertextShaderSource, NULL);
     glCompileShader(vertexShader);
 
+    int success;
+    char infoLog[512];
+    glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
+    if (!success) {
+        glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
+        std :: cout << "Error: Shader vertex Comilation failed" << infoLog << std:: endl;
+    }
+
     // settin up vertex data 
     float vertices[]= {
         -0.5f, -0.5f, 0.0f, //left
