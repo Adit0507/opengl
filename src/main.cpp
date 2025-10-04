@@ -3,18 +3,27 @@
 #include <iostream>
 
 const char *vertextShaderSource = "#version 330 core\n"
-    "layout (location = 0) in vec3 aPos;\n"
-    "void main()\n"
-    "{\n"
-    "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
-    "}\0";
+                                  "layout (location = 0) in vec3 aPos;\n"
+                                  "void main()\n"
+                                  "{\n"
+                                  "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
+                                  "}\0";
 
-void processInput(GLFWwindow *window){
+const char *fragmentShaderSource = "#version 330 core\n"
+                                   "out vec4 FragColor;\n"
+                                   "void main()\n"
+                                   "{\n"
+                                   "   FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
+                                   "}\n\0";
+
+void processInput(GLFWwindow *window)
+{
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
         glfwSetWindowShouldClose(window, true);
 }
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height) {
+void framebuffer_size_callback(GLFWwindow *window, int width, int height)
+{
     glViewport(0, 0, width, height);
 }
 
@@ -26,7 +35,7 @@ int main()
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
     // window object
-                                        //height and width
+    // height and width
     GLFWwindow *window = glfwCreateWindow(800, 600, "Testing Opengl..", NULL, NULL);
     if (window == NULL)
     {
@@ -37,9 +46,10 @@ int main()
     }
     glfwMakeContextCurrent(window);
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    
-    if(!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
-        std:: cout << "Failed to initialize glad" << std:: endl;
+
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
+    {
+        std::cout << "Failed to initialize glad" << std::endl;
         return -1;
     }
 
@@ -51,14 +61,21 @@ int main()
     int success;
     char infoLog[512];
     glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-    if (!success) {
+    if (!success)
+    {
         glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-        std :: cout << "Error: Shader vertex Comilation failed" << infoLog << std:: endl;
+        std ::cout << "Error: Shader vertex Compilation failed" << infoLog << std::endl;
     }
 
-    // settin up vertex data 
-    float vertices[]= {
-        -0.5f, -0.5f, 0.0f, //left
+    // fragment shader
+    unsigned int fragmentShader;
+    fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+
+    // settin up vertex data
+    float vertices[] = {
+        -0.5f, -0.5f, 0.0f, // left
         0.5f, -0.5f, 0.0f,  // right
         0.0f, 0.5f, 0.0f,   // top
     };
@@ -68,7 +85,8 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    while(!glfwWindowShouldClose(window)){
+    while (!glfwWindowShouldClose(window))
+    {
         processInput(window);
 
         glClearColor(1.0f, 0.8f, 0.5f, 2.0f);
