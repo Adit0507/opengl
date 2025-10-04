@@ -20,7 +20,7 @@ int main()
 
     // window object
                                         //height and width
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Opengl..", NULL, NULL);
+    GLFWwindow *window = glfwCreateWindow(800, 600, "Testing Opengl..", NULL, NULL);
     if (window == NULL)
     {
         std::cout << "Failed to create window" << std::endl;
@@ -36,10 +36,23 @@ int main()
         return -1;
     }
 
+    // settin up vertex data 
+    float vertices[]= {
+        -0.5f, -0.5f, 0.0f, //left
+        0.5f, -0.5f, 0.0f,  // right
+        0.0f, 0.5f, 0.0f,   // top
+    };
+
+    unsigned int VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+
     while(!glfwWindowShouldClose(window)){
         processInput(window);
 
-        glClearColor(0.3f, 0.5f, 0.5f, 1.0f);
+        glClearColor(1.0f, 0.8f, 0.5f, 2.0f);
         glClear(GL_COLOR_BUFFER_BIT);
 
         glfwSwapBuffers(window);
