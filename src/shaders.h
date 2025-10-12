@@ -14,7 +14,6 @@ public:
 
     Shader(const char *vertexPath, const char *fragmentPath)
     {
-        // retrievin vertex & fragment source code from filepath
         std::string vertexCode;
         std::string fragmentCode;
         std::ifstream vShaderFile;
@@ -41,7 +40,7 @@ public:
         }
         catch (std::ifstream::failure &e)
         {
-            std::cout << "Error: Shader File not successfully read" << e.what() << std::endl;
+            std::cout << "Error: Shader File not successfully read: " << e.what() << std::endl;
         }
 
         const char *vshaderCode = vertexCode.c_str();
@@ -70,11 +69,11 @@ public:
         glDeleteShader(fragment);
     };
 
-    // use/activate the shader
     void use()
     {
         glUseProgram(ID);
     }
+
     // utility uniform functions
     void setBool(const std::string &name, bool value) const
     {
@@ -92,12 +91,12 @@ public:
 private:
     void checkCompileErrors(unsigned int shader, std::string type)
     {
-        int sucess;
+        int success;
         char infoLog[1024];
         if (type != "PROGRAM")
         {
-            glGetShaderiv(shader, GL_COMPILE_STATUS, &sucess);
-            if (!sucess)
+            glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
+            if (!success)
             {
                 glGetShaderInfoLog(shader, 1024, NULL, infoLog);
                 std::cout << "ERROR::SHADER_COMPILATION_ERROR of type: " << type << "\n"
@@ -106,8 +105,8 @@ private:
         }
         else
         {
-            glGetProgramiv(shader, GL_LINK_STATUS, &sucess);
-            if (!sucess)
+            glGetProgramiv(shader, GL_LINK_STATUS, &success);
+            if (!success)
             {
                 glGetProgramInfoLog(shader, 1024, NULL, infoLog);
                 std::cout << "ERROR:: PROGRAM_LINKING_ERROR of type: " << type << "\n"
